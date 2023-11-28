@@ -6,25 +6,24 @@ function RecipeCard({ props }) {
     <div className="me-3 mt-3">
       <div className="text-decoration-none">
         <div className="card" style={{ width: "18rem" }}>
-          {console.log(props)}
+          {/* {console.log(props)} */}
           <Image
-            width={250}
+            width={200}
             height={250}
             src={props.imgUrl}
             className="card-img-top"
             alt="..."
           />
           <div
-            className="card-body overflow-y-hidden"
+            className="card-body overflow-y-hidden "
             style={{ height: "150px" }}
           >
             <h5 className="card-title">{props.RecipeName}</h5>
-            <p className="card-text">
-              {props.Ingredients}
+            <p className="text-justify">
               {props.Instructions}
             </p>
           </div>
-          <Link href={"/recipes/" + props.id} class="btn btn-primary">
+          <Link href={"/recipes/" + props.id} className="btn btn-primary m-2">
             See Recipe
           </Link>
         </div>

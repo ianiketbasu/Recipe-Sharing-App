@@ -1,67 +1,131 @@
-"use client";
+"use client";// Import necessary functions from Firebase
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 function SignUp() {
+  const [error, setError] = useState(null);
+  const router = useRouter(); 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { email, password } = e.target.elements;
+    const { name, email, password, confirmPassword /* Add more fields as needed */ } = e.target.elements;
+
+    // Validate password and confirmPassword
+    if (password.value !== confirmPassword.value) {
+      setError("Passwords do not match");
+      return;
+    }
 
     try {
-      await createUserWithEmailAndPassword(auth, email.value, password.value);
+      // Create user account
+      const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value);
+
+      // Access the newly created user
+      const user = userCredential.user;
+
+      // Update user profile with additional details
+      await setDoc(doc(db, "Users", user.uid), {
+        name: name.value,
+        email: email.value,
+        // Add more fields as needed
+      });
+
       // Redirect to login page or show success message
-      console.log("Sign-up successful!");
+      router.push("/")
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
       // Handle or display the error to the user
-      console.error(errorCode, errorMessage);
+      setError(`${errorCode}: ${errorMessage}`);
     }
   };
 
   return (
-    <div
-      className="d-flex align-items-center justify-content-center"
-      style={{ height: "80vh" }}
-    >
+    <div className="container mt-5">
       <form onSubmit={handleSubmit}>
         <div className="fs-3 my-3 text-center">Register</div>
-        <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label">
-            Email address
+
+        <div className="mb-3 row">
+          <label htmlFor="exampleInputName" className="col-sm-2 col-form-label">
+            Full Name
           </label>
-          <input
-            type="email"
-            name="email"
-            className="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-          />
-          <div id="emailHelp" className="form-text">
-            We'll never share your email with anyone else.
+          <div className="col-sm-10">
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              id="exampleInputName"
+              required
+            />
           </div>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label">
-            Password
+        <div className="mb-3 row">
+          <label htmlFor="exampleInputEmail" className="col-sm-2 col-form-label">
+            Email address
           </label>
-          <input
-            type="password"
-            name="password"
-            className="form-control"
-            id="exampleInputPassword1"
-          />
+          <div className="col-sm-10">
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              id="exampleInputEmail"
+              aria-describedby="emailHelp"
+              required
+            />
+            <div id="emailHelp" className="form-text">
+              We'll never share your email with anyone else.
+            </div>
+          </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
+        <div className="mb-3 row">
+          <label htmlFor="exampleInputPassword" className="col-sm-2 col-form-label">
+            Password
+          </label>
+          <div className="col-sm-10">
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              id="exampleInputPassword"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="mb-3 row">
+          <label htmlFor="exampleInputConfirmPassword" className="col-sm-2 col-form-label">
+            Confirm Password
+          </label>
+          <div className="col-sm-10">
+            <input
+              type="password"
+              name="confirmPassword"
+              className="form-control"
+              id="exampleInputConfirmPassword"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Add more fields as needed */}
+
+        {error && <div className="text-danger mb-3">{error}</div>}
+
+        <div className="mb-3">
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </div>
 
         <div>
-          <Link href={"/signin"}>existing user ? Sign In</Link>
+          <Link href={"/signin"}>Existing user? Sign In</Link>
         </div>
       </form>
     </div>

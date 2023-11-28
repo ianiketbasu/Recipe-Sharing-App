@@ -1,6 +1,11 @@
+"use client";
+import { auth } from "@/firebase";
 import Link from "next/link";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function Header() {
+  const [user] = useAuthState(auth);
+  // console.log(user);
   return (
     <div>
       <nav
@@ -12,18 +17,23 @@ function Header() {
             Recipe App
           </Link>
 
-          {/* <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            /> */}
-
-          <Link href={"/signin"} className="btn btn-outline-success">
+          {/* <Link href={"/signin"} className="btn btn-outline-success">
             Signin
-          </Link>
-          {/* </form> */}
+          </Link> */}
+          {user ? (
+            // User is signed in
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => auth.signOut()}
+            >
+              Logout
+            </button>
+          ) : (
+            // User is not signed in
+            <Link href={"/signin"} className="btn btn-outline-success">
+              Sign In
+            </Link>
+          )}
         </div>
       </nav>
     </div>

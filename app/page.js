@@ -3,12 +3,14 @@ import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { collection, doc, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import RecipeCard from "./components/RecipeCard";
 
 export default function Home() {
   const [recipeList, setRecipeList] = useState([]);
+  const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
     const getRecipeList = async () => {
@@ -20,13 +22,10 @@ export default function Home() {
       }));
 
       setRecipeList(recipes);
-      console.log(recipeList);
     };
     getRecipeList();
   }, []);
-  // useEffect(() => {
-  //   console.log(recipeList);
-  // }, [recipeList]);
+
   return (
     <main className="container">
       <div className="navbar bg-body-tertiary  my-3">
@@ -43,12 +42,14 @@ export default function Home() {
               Search
             </button>
           </form>
-          <Link
-            href={"/recipes/create"}
-            className="btn btn-primary ms-2 create-recipe-btn"
-          >
-            <span>Create Recipe</span>
-          </Link>
+          {user && (
+            <Link
+              href={"/recipes/create"}
+              className="btn btn-primary ms-2 create-recipe-btn"
+            >
+              <span>Create Recipe</span>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -60,3 +61,6 @@ export default function Home() {
     </main>
   );
 }
+
+
+

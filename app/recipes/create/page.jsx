@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "../../../firebase";
 import { addDoc, collection } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 const CreateRecipe = () => {
   const [recipeName, setRecipeName] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
   const [file, setFile] = useState(null);
+  const router = useRouter();
 
   const handleImageUpload = (e) => {
     setFile(e.target.files[0]);
@@ -53,6 +55,7 @@ const CreateRecipe = () => {
           setIngredients("");
           setInstructions("");
           setFile(null);
+          router.push("/")
         }
       );
     } else {
