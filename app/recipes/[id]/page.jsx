@@ -166,17 +166,31 @@
 // }
 
 
-
 "use client";
 import { useEffect, useState } from "react";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { useRouter } from "next/navigation";
+import { auth } from "../../../firebase";
+import { getAuth } from "firebase/auth";
 
 export default function RecipeDetails({ params }) {
   const [recipeDetails, setRecipeDetails] = useState(null);
   const recipeId = params.id;
   const router = useRouter();
+  const [currentUserId, setCurrentUserId] = useState(null); // Assuming you have the current user's ID
+
+  const getCurrentUserId = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (user) {
+      return user.uid;
+    } else {
+      return null;
+    }
+  };
+  
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -201,6 +215,10 @@ export default function RecipeDetails({ params }) {
             };
 
             setRecipeDetails(mergedData);
+
+            // Assuming you have the current user's ID available
+            const userId = getCurrentUserId(); // Replace this with your actual method to get the current user's ID
+            setCurrentUserId(userId);
           } else {
             console.log("User not found");
           }
@@ -227,11 +245,16 @@ export default function RecipeDetails({ params }) {
 
     if (isConfirmed) {
       try {
-        // Delete the recipe (replace the following line with your delete logic)
-        await deleteDoc(doc(db, "Recipes", recipeId));
-        
-        // Redirect to the home page after deletion
-        router.push("/");
+        // Check if the current user is the one who created the recipe
+        if (currentUserId === recipeDetails.userId) {
+          // Delete the recipe (replace the following line with your delete logic)
+          await deleteDoc(doc(db, "Recipes", recipeId));
+
+          // Redirect to the home page after deletion
+          router.push("/");
+        } else {
+          console.log("You are not authorized to delete this recipe.");
+        }
       } catch (error) {
         console.error("Error deleting recipe:", error.message);
       }
@@ -260,12 +283,6 @@ export default function RecipeDetails({ params }) {
             <p style={{ fontSize: "16px" }}>
               Posted by: {recipeDetails?.postedByUserName}
             </p>
-            {/* <img
-              src={recipeDetails?.userImageUrl}
-              alt="User"
-              className="img-fluid rounded-circle"
-              style={{ width: "50px", height: "50px" }}
-            /> */}
           </div>
 
           {/* Recipe Image */}
@@ -316,22 +333,26 @@ export default function RecipeDetails({ params }) {
           </div>
 
           <div className="d-flex mt-3">
-            <button
-              className="btn btn-primary flex-grow-1 me-2"
-              type="button"
-              onClick={handleUpdateRecipeClick}
-              style={{ fontSize: "14px" }} // Adjust the font size
-            >
-              Update Recipe
-            </button>
-            <button
-              className="btn btn-primary flex-grow-1"
-              type="button"
-              onClick={handleDeleteRecipeClick}
-              style={{ fontSize: "14px" }} // Adjust the font size
-            >
-              Delete Recipe
-            </button>
+            {currentUserId === recipeDetails?.userId && (
+              <>
+                <button
+                  className="btn btn-primary flex-grow-1 me-2"
+                  type="button"
+                  onClick={handleUpdateRecipeClick}
+                  style={{ fontSize: "14px" }} // Adjust the font size
+                >
+                  Update Recipe
+                </button>
+                <button
+                  className="btn btn-primary flex-grow-1"
+                  type="button"
+                  onClick={handleDeleteRecipeClick}
+                  style={{ fontSize: "14px" }} // Adjust the font size
+                >
+                  Delete Recipe
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

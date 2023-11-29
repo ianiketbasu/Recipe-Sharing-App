@@ -42,12 +42,15 @@ export default function Home() {
               Search
             </button>
           </form>
-          {user && (
-            <Link
-              href={"/recipes/create"}
-              className="btn btn-primary ms-2 create-recipe-btn"
-            >
+          {user ? (
+            <Link href={"/recipes/create"} className="btn btn-primary ms-2 create-recipe-btn">
               <span>Create Recipe</span>
+            </Link>
+          ) : (
+            <Link href={"../signin"}>
+              <button className="btn btn-primary ms-2 create-recipe-btn">
+                <span>Login/Register to Create Recipe</span>
+              </button>
             </Link>
           )}
         </div>
@@ -55,12 +58,11 @@ export default function Home() {
 
       <div className="d-flex flex-wrap">
         {recipeList.map((item) => {
-          return item.imgUrl ? <RecipeCard props={item} /> : null;
+          return item.imgUrl ? <RecipeCard props={item} key={item.id} /> : null;
         })}
       </div>
     </main>
   );
 }
-
 
 
