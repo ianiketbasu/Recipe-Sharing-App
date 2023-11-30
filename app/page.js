@@ -1,12 +1,12 @@
-"use client";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+
+"use client"
+import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import RecipeCard from "./components/RecipeCard";
+import Typist from "react-typist";
+import "./globals.css";
 
 export default function Home() {
   const [recipeList, setRecipeList] = useState([]);
@@ -27,42 +27,18 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="container">
-      <div className="navbar bg-body-tertiary  my-3">
-        <div className="container-fluid">
-          <a className="navbar-brand">Recipes List</a>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
-          {user ? (
-            <Link href={"/recipes/create"} className="btn btn-primary ms-2 create-recipe-btn">
-              <span>Create Recipe</span>
-            </Link>
-          ) : (
-            <Link href={"../signin"}>
-              <button className="btn btn-primary ms-2 create-recipe-btn">
-                <span>Login/Register to Create Recipe</span>
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
+    <div className="home-container">
+      <div className="background-image"></div>
+      <div className="content-container">
+        {/* <Typist className="welcome-text" cursor={{ show: false }}> */}
+          <h1>Welcome to FlavorFiesta</h1>
+        {/* </Typist> */}
 
-      <div className="d-flex flex-wrap">
-        {recipeList.map((item) => {
-          return item.imgUrl ? <RecipeCard props={item} key={item.id} /> : null;
-        })}
+        <p>
+          Savor the Flavorful Path: Discover, Connect, and Share Your Culinary
+          Story.
+        </p>
       </div>
-    </main>
+    </div>
   );
 }
-
-

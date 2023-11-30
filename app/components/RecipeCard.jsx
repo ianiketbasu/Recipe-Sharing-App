@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function RecipeCard({ props }) {
   return (
-    <div className="me-3 mt-3">
+    <div className="m-3 me-3 mt-3">
       <div className="text-decoration-none">
         <div className="card" style={{ width: "18rem" }}>
           {/* {console.log(props)} */}
