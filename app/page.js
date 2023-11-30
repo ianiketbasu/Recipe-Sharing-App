@@ -5,7 +5,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import RecipeCard from "./components/RecipeCard";
-import Typist from "react-typist";
 import "./globals.css";
 
 export default function Home() {
