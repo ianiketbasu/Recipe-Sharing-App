@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import RecipeCard from "./components/RecipeCard";
-import "./globals.css";
+import "./CSS/home.css";
 
 export default function Home() {
   const [recipeList, setRecipeList] = useState([]);

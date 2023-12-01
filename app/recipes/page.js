@@ -26,7 +26,7 @@ export default function AllRecipes() {
   }, []);
 
   return (
-    <main className="container ">
+    <main className="container container-fluid">
       <div className="navbar bg-body-tertiary  my-3">
         <div className="container-fluid">
           <a className="navbar-brand">Recipes List</a>
@@ -49,7 +49,7 @@ export default function AllRecipes() {
         </div>
       </div>
 
-      <div className="d-flex flex-wrap justify-content-center">
+      <div className="d-flex flex-wrap justify-content-center mx-5">
         {recipeList.map((item) => {
           return item.imgUrl ? <RecipeCard props={item} key={item.id} /> : null;
         })}

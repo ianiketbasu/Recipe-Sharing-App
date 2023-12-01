@@ -70,7 +70,7 @@ export default function MyRecipes() {
       )}
 
       {userId && (
-        <div className="d-flex flex-wrap justify-content-lg-between">
+        <div className="d-flex flex-wrap justify-content-center mx-5">
           {myRecipeList.map((item) => {
             return item.imgUrl ? (
               <RecipeCard props={item} key={item.id} />
