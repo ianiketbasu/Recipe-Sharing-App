@@ -1,0 +1,66 @@
+.profile-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .profile-details-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .profile-picture {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .card-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .card-text {
+    font-size: 18px;
+  }
+  
+  .d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .btn-primary {
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+  }
+  
+  .btn-primary:hover {
+    background-color: #ff4d4d;
+    border-color: #ff4d4d;
+  }
+  
+  .btn-outline-primary {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+  }
+  
+  .btn-outline-primary:hover {
+    color: #fff;
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+  }
+  
+  .profile-details-card textarea {
+    width: 100%;
+    height: 100px;
+    /* resize: none;  */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  

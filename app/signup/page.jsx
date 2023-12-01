@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 
 function SignUp() {
   const [error, setError] = useState(null);
-  const router = useRouter(); 
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, email, password, confirmPassword /* Add more fields as needed */ } = e.target.elements;
+    const { name, email, password, confirmPassword } = e.target.elements;
 
     // Validate password and confirmPassword
     if (password.value !== confirmPassword.value) {
@@ -22,21 +22,33 @@ function SignUp() {
     }
 
     try {
-      // Create user account
+      // Step 1: Create user account
       const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value);
 
-      // Access the newly created user
+      // Step 2: Access the newly created user
       const user = userCredential.user;
 
-      // Update user profile with additional details
+      // Step 3: Update user profile with additional details in the Users schema
       await setDoc(doc(db, "Users", user.uid), {
         name: name.value,
         email: email.value,
         // Add more fields as needed
       });
 
-      // Redirect to login page or show success message
-      router.push("/")
+      // Step 4: Create user profile in userProfile schema
+      await setDoc(doc(db, "userProfiles", user.uid), {
+        uid: user.uid,
+        name: name.value,
+        email: email.value,
+        bio: "", // Default values for the new schema
+        cookingSkills: "",
+        favouriteRecipes: [],
+        followers: 0,
+        likes: 0,
+      });
+
+      // Step 5: Redirect to login page or show success message
+      router.push("/");
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
