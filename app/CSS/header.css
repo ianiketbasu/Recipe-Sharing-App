@@ -8,10 +8,10 @@
   }
    */
    .navbar {
-    position: fixed;
+    /* position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 0; */
+    /* width: 100%; */
     background-color: rgba(255, 255, 255, 0.7); /* Set a semi-transparent dark color */
     box-shadow: 0 2px 4px rgba(80, 79, 79, 0.5); /* Add a subtle box shadow */
     z-index: 1;
