@@ -55,7 +55,7 @@ const CreateRecipe = () => {
           setIngredients("");
           setInstructions("");
           setFile(null);
-          router.push("/")
+          router.push("/your-recipes")
         }
       );
     } else {

@@ -19,7 +19,7 @@ function SignIn() {
       const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
       const user = userCredential.user;
       console.log(user);
-      router.push("/");
+      router.push("/recipes");
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;

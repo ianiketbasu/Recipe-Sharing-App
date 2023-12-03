@@ -1,15 +1,19 @@
-"use client";
 
+
+"use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import RecipeCard from "../components/RecipeCard";
+import { BiAddToQueue } from "react-icons/bi";
 
 export default function AllRecipes() {
   const [recipeList, setRecipeList] = useState([]);
+  const [filteredRecipeList, setFilteredRecipeList] = useState([]);
   const [user, loading, error] = useAuthState(auth);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const getRecipeList = async () => {
@@ -21,9 +25,28 @@ export default function AllRecipes() {
       }));
 
       setRecipeList(recipes);
+      setFilteredRecipeList(recipes);
     };
     getRecipeList();
   }, []);
+
+  const handleSearch = (event) => {
+    const searchQuery = event.target.value;
+    setSearchTerm(searchQuery.toLowerCase());
+    if (searchQuery) {
+      const filteredRecipes = recipeList.filter((recipe) =>
+        recipe.RecipeName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredRecipeList(filteredRecipes);
+    } else {
+      setFilteredRecipeList(recipeList);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    setFilteredRecipeList(recipeList);
+  };
 
   return (
     <main className="container container-fluid">
@@ -36,25 +59,40 @@ export default function AllRecipes() {
               type="search"
               placeholder="Search"
               aria-label="Search"
+              value={searchTerm}
+              onChange={handleSearch}
             />
-            <button className="btn btn-outline-success" type="submit">
+            <button className="btn btn-outline-success" type="button" onClick={handleSearch}>
               Search
             </button>
+            {searchTerm && (
+              <button
+                className="btn btn-outline-secondary ms-2"
+                type="button"
+                onClick={handleClearSearch}
+              >
+                Clear
+              </button>
+            )}
           </form>
           <Link href={user ? "/recipes/create" : "../signin"}>
             <button className="btn btn-primary ms-2 create-recipe-btn">
-              <span>Create Recipe</span>
+              <BiAddToQueue className="me-1" />
+              Create Recipe
             </button>
           </Link>
         </div>
       </div>
 
       <div className="d-flex flex-wrap justify-content-center mx-5">
-        {recipeList.map((item) => {
+        {filteredRecipeList.map((item) => {
           return item.imgUrl ? <RecipeCard props={item} key={item.id} /> : null;
         })}
+        {filteredRecipeList.length === 0 && searchTerm && (
+          <p>No recipes found for "{searchTerm}"</p>
+        )}
+        {filteredRecipeList.length === 0 && !searchTerm && <p>No recipes found</p>}
       </div>
     </main>
   );
 }
-

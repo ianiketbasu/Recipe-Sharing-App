@@ -163,7 +163,7 @@ const CreateRecipe = ({ params }) => {
       setIngredients("");
       setInstructions("");
     }
-    router.push("/");
+    router.push(`/recipes/${params.id}`);
   };
 
   return (

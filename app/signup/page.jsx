@@ -1,4 +1,4 @@
-"use client";// Import necessary functions from Firebase
+"use client"; // Import necessary functions from Firebase
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -23,7 +23,11 @@ function SignUp() {
 
     try {
       // Step 1: Create user account
-      const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.value,
+        password.value
+      );
 
       // Step 2: Access the newly created user
       const user = userCredential.user;
@@ -48,7 +52,7 @@ function SignUp() {
       });
 
       // Step 5: Redirect to login page or show success message
-      router.push("/");
+      router.push("/recipes");
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -78,7 +82,10 @@ function SignUp() {
         </div>
 
         <div className="mb-3 row">
-          <label htmlFor="exampleInputEmail" className="col-sm-2 col-form-label">
+          <label
+            htmlFor="exampleInputEmail"
+            className="col-sm-2 col-form-label"
+          >
             Email address
           </label>
           <div className="col-sm-10">
@@ -97,7 +104,10 @@ function SignUp() {
         </div>
 
         <div className="mb-3 row">
-          <label htmlFor="exampleInputPassword" className="col-sm-2 col-form-label">
+          <label
+            htmlFor="exampleInputPassword"
+            className="col-sm-2 col-form-label"
+          >
             Password
           </label>
           <div className="col-sm-10">
@@ -112,7 +122,10 @@ function SignUp() {
         </div>
 
         <div className="mb-3 row">
-          <label htmlFor="exampleInputConfirmPassword" className="col-sm-2 col-form-label">
+          <label
+            htmlFor="exampleInputConfirmPassword"
+            className="col-sm-2 col-form-label"
+          >
             Confirm Password
           </label>
           <div className="col-sm-10">
