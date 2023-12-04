@@ -64,11 +64,11 @@ function Header() {
             )}
           </div>
 
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center user-name">
             {user ? (
               <div className="d-flex align-items-center me-2">
                 <Link href={"/profile"}>
-                  <div className="btn btn-outline-secondary me-2">
+                  <div className="btn btn-outline-secondary me-2 ">
                     
                     {userData?.photoURL ? (
                       <img
@@ -83,13 +83,14 @@ function Header() {
                     <span className="text-black ms-2">{userData?.name}</span>
                   </div>
                 </Link>
-                <div className="d-flex flex-column">
+                <div className="d-flex flex-column my-btn">
                   <button
                     className="btn btn-outline-danger"
                     onClick={handleLogout}
                   >
                     <FiLogOut className="me-1" />
                     Logout
+                    
                   </button>
                 </div>
               </div>
