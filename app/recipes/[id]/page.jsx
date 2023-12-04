@@ -289,69 +289,148 @@ export default function RecipeDetails({ params }) {
     }
   };
 
+  // const handleLikeClick = async () => {
+  //   if (user) {
+  //     try {
+  //       const recipeDocRef = doc(db, "Recipes", recipeId);
+  //       const recipeDoc = await getDoc(recipeDocRef);
+
+  //       if (recipeDoc.exists()) {
+  //         const recipeData = recipeDoc.data();
+  //         const postedByUserId = recipeData.userId;
+
+  //         const recipeLikesDocRef = doc(db, "RecipeLikes", recipeId);
+  //         const recipeLikesDoc = await getDoc(recipeLikesDocRef);
+
+  //         if (recipeLikesDoc.exists()) {
+  //           const currentLikeCount = recipeLikesDoc.data().LikeCount;
+  //           const currentUsersWhoLiked =
+  //             recipeLikesDoc.data()?.UsersWhoLiked || [];
+
+  //           let updatedLikeCount = currentLikeCount;
+  //           let updatedUsersWhoLiked = [...currentUsersWhoLiked];
+
+  //           const userId = getCurrentUserId();
+
+  //           if (currentUsersWhoLiked.includes(userId)) {
+  //             // User has already liked the recipe, so unlike it
+  //             updatedLikeCount--;
+  //             updatedUsersWhoLiked = updatedUsersWhoLiked.filter(
+  //               (id) => id !== userId
+  //             );
+  //             setIsLiked(false);
+  //           } else {
+  //             // User hasn't liked the recipe, so like it
+  //             updatedLikeCount++;
+  //             updatedUsersWhoLiked.push(userId);
+  //             setIsLiked(true);
+  //           }
+
+  //           await updateDoc(recipeLikesDocRef, {
+  //             LikeCount: updatedLikeCount,
+  //             UsersWhoLiked: updatedUsersWhoLiked,
+  //           });
+
+  //           // Update the Likes field in UserProfiles by accumulating likes for all recipes
+  //           const postedUserDocRef = doc(db, "userProfiles", postedByUserId);
+  //           const postedUserDoc = await getDoc(postedUserDocRef);
+
+  //           if (postedUserDoc.exists()) {
+  //             const userLikes = postedUserDoc.data().Likes || 0;
+
+  //             // Calculate total likes by accumulating likes for all recipes
+  //             const updatedLikes =
+  //               userLikes + (updatedLikeCount - currentLikeCount);
+
+  //             await updateDoc(postedUserDocRef, {
+  //               Likes: updatedLikes,
+  //             });
+
+  //             setLikeCount(updatedLikeCount);
+  //           } else {
+  //             console.error("User profile not found");
+  //           }
+  //         } else {
+  //           console.error("RecipeLikes document not found");
+  //         }
+  //       } else {
+  //         console.error("Recipe not found");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error updating likes:", error.message);
+  //     }
+  //   } else {
+  //     alert("Please log in to like the recipe.");
+  //   }
+  // };
+
   const handleLikeClick = async () => {
     if (user) {
       try {
         const recipeDocRef = doc(db, "Recipes", recipeId);
         const recipeDoc = await getDoc(recipeDocRef);
-
+  
         if (recipeDoc.exists()) {
           const recipeData = recipeDoc.data();
           const postedByUserId = recipeData.userId;
-
+  
           const recipeLikesDocRef = doc(db, "RecipeLikes", recipeId);
           const recipeLikesDoc = await getDoc(recipeLikesDocRef);
-
+  
+          let updatedLikeCount;
+          let updatedUsersWhoLiked;
+  
           if (recipeLikesDoc.exists()) {
+            // If RecipeLikes document exists, update likes based on the existing data
             const currentLikeCount = recipeLikesDoc.data().LikeCount;
             const currentUsersWhoLiked =
               recipeLikesDoc.data()?.UsersWhoLiked || [];
-
-            let updatedLikeCount = currentLikeCount;
-            let updatedUsersWhoLiked = [...currentUsersWhoLiked];
-
+  
             const userId = getCurrentUserId();
-
+  
             if (currentUsersWhoLiked.includes(userId)) {
               // User has already liked the recipe, so unlike it
-              updatedLikeCount--;
-              updatedUsersWhoLiked = updatedUsersWhoLiked.filter(
+              updatedLikeCount = Math.max(currentLikeCount - 1, 0);
+              updatedUsersWhoLiked = currentUsersWhoLiked.filter(
                 (id) => id !== userId
               );
               setIsLiked(false);
             } else {
               // User hasn't liked the recipe, so like it
-              updatedLikeCount++;
-              updatedUsersWhoLiked.push(userId);
+              updatedLikeCount = currentLikeCount + 1;
+              updatedUsersWhoLiked = [...currentUsersWhoLiked, userId];
               setIsLiked(true);
             }
-
-            await updateDoc(recipeLikesDocRef, {
+          } else {
+            // If RecipeLikes document doesn't exist, create it with initial data
+            updatedLikeCount = 1;
+            updatedUsersWhoLiked = [getCurrentUserId()];
+            setIsLiked(true);
+  
+            await setDoc(recipeLikesDocRef, {
               LikeCount: updatedLikeCount,
               UsersWhoLiked: updatedUsersWhoLiked,
             });
-
-            // Update the Likes field in UserProfiles by accumulating likes for all recipes
-            const postedUserDocRef = doc(db, "userProfiles", postedByUserId);
-            const postedUserDoc = await getDoc(postedUserDocRef);
-
-            if (postedUserDoc.exists()) {
-              const userLikes = postedUserDoc.data().Likes || 0;
-
-              // Calculate total likes by accumulating likes for all recipes
-              const updatedLikes =
-                userLikes + (updatedLikeCount - currentLikeCount);
-
-              await updateDoc(postedUserDocRef, {
-                Likes: updatedLikes,
-              });
-
-              setLikeCount(updatedLikeCount);
-            } else {
-              console.error("User profile not found");
-            }
+          }
+  
+          // Update the Likes field in UserProfiles by accumulating likes for all recipes
+          const postedUserDocRef = doc(db, "userProfiles", postedByUserId);
+          const postedUserDoc = await getDoc(postedUserDocRef);
+  
+          if (postedUserDoc.exists()) {
+            const userLikes = postedUserDoc.data().Likes || 0;
+  
+            // Calculate total likes by accumulating likes for all recipes
+            const updatedLikes =
+              Math.max(userLikes + (updatedLikeCount - recipeLikesDoc?.data()?.LikeCount), 0);
+  
+            await updateDoc(postedUserDocRef, {
+              Likes: updatedLikes,
+            });
+  
+            setLikeCount(updatedLikeCount);
           } else {
-            console.error("RecipeLikes document not found");
+            console.error("User profile not found");
           }
         } else {
           console.error("Recipe not found");
@@ -363,6 +442,7 @@ export default function RecipeDetails({ params }) {
       alert("Please log in to like the recipe.");
     }
   };
+  
 
   const handleUpdateRecipeClick = () => {
     if (user) {
