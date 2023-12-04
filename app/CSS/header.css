@@ -1,20 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:wght@700&family=Orelega+One&family=Roboto:wght@100&family=Ubuntu&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:wght@700&family=Orelega+One&family=Roboto:wght@100&family=Ubuntu&display=swap"); */
 
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:wght@700&family=Orelega+One&family=Roboto:wght@100&family=Rubik:ital,wght@0,700;1,900&family=Ubuntu&display=swap');
 
 
 .user-name{
     font-family: 'Rubik', sans-serif;
+    color: white;
 }
 
 .navbar {
-  background-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 2px 4px rgba(80, 79, 79, 0.5);
+  background-color: #ff6b6b;
+  box-shadow: 0 2px 4px rgba(114, 112, 112, 0.5);
   z-index: 1;
 }
 
 .my-colour {
-  color: rgb(97, 91, 91);
+ 
+  color: white;
   font-family: "Exo 2", sans-serif;
   font-size: x-large;
   font-weight: 850;

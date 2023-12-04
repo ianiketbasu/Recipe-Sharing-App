@@ -8,6 +8,7 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { BiUserCheck, BiUserPlus } from "react-icons/bi";
+import "../../CSS/profile.css"
 
 export default function RecipeDetails({ params }) {
   const [recipeDetails, setRecipeDetails] = useState(null);
@@ -429,43 +430,21 @@ export default function RecipeDetails({ params }) {
           style={{
             padding: "20px",
             margin: "10px",
-            border: "1px solid #ccc",
+            
             borderRadius: "5px",
+            boxShadow: '0 0 5px #ff6b6b'
           }}
+       
         >
-          <div className="mb-4">
-            <h2 style={{ fontSize: "24px", fontWeight: "bold" }}>
+          <div className="mb-4 card-title">
+            <h2 className="card-title">
               {recipeDetails?.RecipeName}
             </h2>
-            <p style={{ fontSize: "16px" }}>
+            <p className="user-name" style={{color: "#ff4d4d"}} >
               By: {recipeDetails?.postedByUserName}
             </p>
 
-            {/* {currentUserId !== recipeDetails?.userId && currentUserId && (
-              <div className="mt-2">
-                
-                <button
-                  className={`btn ${
-                    isFollowing ? "btn-primary" : "btn-outline-primary"
-                  }`}
-                  type="button"
-                  onClick={handleFollowClick}
-                >
-                  {isFollowing ? (
-                    <>
-                      <BiUserCheck className="me-1" />
-                      Following
-                    </>
-                  ) : (
-                    <>
-                      <BiUserPlus className="me-1" />
-                      Follow
-                    </>
-                  )}
-                  {followersCount > 0 && ` (${followersCount})`}
-                </button>
-              </div>
-            )} */}
+            
             {currentUserId !== recipeDetails?.userId && currentUserId && (
               <div className="mt-2">
                 <button
@@ -524,16 +503,17 @@ export default function RecipeDetails({ params }) {
         </div>
 
         <div
-          className="col-md-6"
+          className="col-md-6 "
           style={{
             padding: "20px",
             margin: "10px",
-            border: "1px solid #ccc",
+            boxShadow: '0 0 5px #ff6b6b',
             borderRadius: "5px",
           }}
+          
         >
           <div className="mb-4">
-            <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
+            <h3 style={{ marginBottom:"5px"}} className="card-title">
               Ingredients:
             </h3>
             <div
@@ -543,16 +523,17 @@ export default function RecipeDetails({ params }) {
                 fontSize: "16px",
                 textAlign: "justify",
               }}
+              className="card-body"
             >
               {recipeDetails?.Ingredients}
             </div>
           </div>
 
           <div>
-            <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
+            <h3 style={{ marginBottom:"5px"}} className="card-title">
               Cooking Instructions:
             </h3>
-            <p style={{ fontSize: "16px", textAlign: "justify" }}>
+            <p style={{ fontSize: "16px", textAlign: "justify" }} className="card-body">
               {recipeDetails?.Instructions}
             </p>
           </div>

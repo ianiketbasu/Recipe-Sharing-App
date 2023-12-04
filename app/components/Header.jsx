@@ -68,7 +68,7 @@ function Header() {
             {user ? (
               <div className="d-flex align-items-center me-2">
                 <Link href={"/profile"}>
-                  <div className="btn btn-outline-secondary me-2 ">
+                  <div className="btn btn-light me-2 ">
                     
                     {userData?.photoURL ? (
                       <img
@@ -80,13 +80,14 @@ function Header() {
                     ) : (
                       <FaUser className="rounded-circle profile-icon" />
                     )}
-                    <span className="text-black ms-2">{userData?.name}</span>
+                    <span style={{color: "#ff4d4d"}}  className="ms-2">{userData?.name}</span>
                   </div>
                 </Link>
                 <div className="d-flex flex-column my-btn">
                   <button
                     className="btn btn-outline-danger"
                     onClick={handleLogout}
+                    style={{color: "white"}} 
                   >
                     <FiLogOut className="me-1" />
                     Logout
