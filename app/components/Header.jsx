@@ -20,7 +20,7 @@ function Header() {
     const fetchUserData = async () => {
       if (user) {
         try {
-          const userDocRef = doc(db, "Users", user.uid);
+          const userDocRef = doc(db, "userProfiles", user.uid);
           const userDoc = await getDoc(userDocRef);
 
           if (userDoc.exists()) {
@@ -69,12 +69,13 @@ function Header() {
               <div className="d-flex align-items-center me-2">
                 <Link href={"/profile"}>
                   <div className="btn btn-outline-secondary me-2">
+                    
                     {userData?.photoURL ? (
                       <img
                         src={userData.photoURL}
                         alt="Profile"
                         className="rounded-circle profile-picture"
-                        style={{ width: "40px", height: "40px" }} // Set the desired size
+                        style={{ width: "23px", height: "23px" }} // Set the desired size
                       />
                     ) : (
                       <FaUser className="rounded-circle profile-icon" />
